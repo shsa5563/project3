@@ -31,7 +31,6 @@
 #include "MKL25Z4.h"
 #include "spi0.h"
 #include "nrf.h"
-#include "uart.h"
 int main(void)
 {
 	uint8_t ch[4] ={0};
@@ -45,13 +44,13 @@ int main(void)
     		  nrf_rx_pipesize_read(); //Read the values to verify
     		  nrf_rx_addr_write(); //write and set the rx address
     		  nrf_rx_addr_read(); //Read the values to verify
-//    		  while(1)
-//    		{
-//    			  GPIOE_PSOR=1<<0; //toggle CE
-//    			  delay(200);
-//    			  nrf_read_data(); //poll for data
-//    			  GPIOE_PCOR=1<<0;  //toggle CE
-//    	  }
+    		  while(1)
+    		{
+    			  GPIOE_PSOR=1<<0; //toggle CE
+    			  delay(200);
+    			  nrf_read_data(); //poll for data
+    			  GPIOE_PCOR=1<<0;  //toggle CE
+    	  }
 
 
 
