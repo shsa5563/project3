@@ -8,6 +8,14 @@
 #include "spi0.h"
 #include "MKL25Z4.h"
 
+
+void spi_flush()
+{
+	SPI0_C1&=0xBF;
+	spi_init();
+}
+
+
 unsigned char  spi_send_byte(char spiMsg)
 {
 
@@ -29,14 +37,6 @@ unsigned char spi_receive_byte()
   return spiMsg;
 
 }
-
-void spi_flush()
-{
-	SPI0_C1&=0xBF;
-	spi_init();
-}
-
-
 void spi0_init( void){
 
   //SPI0 module initialization
