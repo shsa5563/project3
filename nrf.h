@@ -21,6 +21,12 @@
 #define NRF_ENRXADDR (0x02)
 #define W_TXPAYLOAD (0xA0)
 #define R_RXPAYLOAD (0x61)
+/*
+ * nrf.c
+ *
+ *  Created on: 04-Nov-2016
+ *      Author: Satyanarayana
+ */
 
 
 void nrf_read_data();

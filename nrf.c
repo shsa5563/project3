@@ -1,8 +1,13 @@
+/*
+ * spi0.c
+ *
+ *  Created on: 04-Nov-2016
+ *      Author: Satyanarayana
+ */
 #include "MKL25Z4.h"
 #include "nrf.h"
 #include "spi0.h"
 #include "led.h"
-#include "uart.h"
 void nrf_config_write() //write to the config register
 {
 	TEST_LOW; //toggle CS
@@ -22,18 +27,8 @@ void nrf_config_read() //read from the config register
 	if (c==0x03)
 	{
 		Initialize_LED();
-	      Intensty_Modify(CYAN, 900);
+	      Intensty_Modify(MAGENTA, 500);
 	}
-}
-
-void nrf_write_register(unsigned char address) //write command
-{
-	spi_send_byte(0x20|address);
-}
-
-void nrf_read_register(unsigned char address) //read command
-{
-	spi_send_byte(0x00|address);
 }
 
 void nrf_flush_tx_fifo() //empty the nrf tx buffer
@@ -57,6 +52,17 @@ void nrf_transmit_data() //send data to nrf buffer
 	spi_send_byte(0x10);
 	TEST_HIGH;
 }
+void nrf_write_register(unsigned char address) //write command
+{
+	spi_send_byte(0x20|address);
+}
+
+void nrf_read_register(unsigned char address) //read command
+{
+	spi_send_byte(0x00|address);
+}
+
+
 
 void nrf_read_data() //receive data from nrf buffer
 {
@@ -69,10 +75,10 @@ void nrf_read_data() //receive data from nrf buffer
 
 	nrf_fifostatus_read();
 
-	if (c==0x07) //poll for data 07 from the tx
+	if (c==0x10) //poll for data 07 from the tx
 	{
-		PTB_BASE_PTR->PDDR |= 1<<18;
-
+		Initialize_LED();
+			      Intensty_Modify(RED, 900);
 	}
 }
 
@@ -127,6 +133,31 @@ void nrf_tx_addr_read() //read the tx address register
 		 c=spi_receive_byte();
 	 }
 	TEST_HIGH;
+}
+
+
+void nrf_rx_pipesize_write() //set the data pipe size
+{
+	int i;
+	TEST_LOW;
+	nrf_write_register(NRF_PIPESIZE);
+
+	spi_send_byte(0x01);
+
+	TEST_HIGH;
+}
+
+void nrf_rx_pipesize_read()  //read the data pipe size
+{
+	int i;
+	char c;
+	TEST_LOW;
+	nrf_read_register(NRF_PIPESIZE);
+
+	 spi_send_byte(0xff);
+	 c=spi_receive_byte();
+
+	 TEST_HIGH;
 }
 
 void nrf_tx_addr_write() //write the tx address register
@@ -191,27 +222,3 @@ void nrf_en_rxaddr_read() //read from the datapipe register
 	 TEST_HIGH;
 }
 
-
-void nrf_rx_pipesize_write() //set the data pipe size
-{
-	int i;
-	TEST_LOW;
-	nrf_write_register(NRF_PIPESIZE);
-
-	spi_send_byte(0x01);
-
-	TEST_HIGH;
-}
-
-void nrf_rx_pipesize_read()  //read the data pipe size
-{
-	int i;
-	char c;
-	TEST_LOW;
-	nrf_read_register(NRF_PIPESIZE);
-
-	 spi_send_byte(0xff);
-	 c=spi_receive_byte();
-
-	 TEST_HIGH;
-}
