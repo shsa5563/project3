@@ -37,7 +37,23 @@ int main(void)
 	uint8_t ch[4] ={0};
 	UART0_init();
 	spi0_init();
-    send_char('A');
+    		  nrf_config_write(); //Write config to set as RX
+    		  nrf_config_read(); //Read the values to verify
+    		  nrf_en_rxaddr_write(); //Write to the En_rxaddr register to activate datapipe 0
+    		  nrf_en_rxaddr_read(); //Read the values to verify
+    		  nrf_rx_pipesize_write(); //set the pipe size
+    		  nrf_rx_pipesize_read(); //Read the values to verify
+    		  nrf_rx_addr_write(); //write and set the rx address
+    		  nrf_rx_addr_read(); //Read the values to verify
+//    		  while(1)
+//    		{
+//    			  GPIOE_PSOR=1<<0; //toggle CE
+//    			  delay(200);
+//    			  nrf_read_data(); //poll for data
+//    			  GPIOE_PCOR=1<<0;  //toggle CE
+//    	  }
+
+
 
 //	for(int i=0;i<4;i++){
 //		TEST_LOW;
@@ -48,12 +64,12 @@ int main(void)
 //	    ch[i] = spi_receive_byte();//  SPI_RD_WR_REG = i+5; //OUTPUT A1 ON SPI
 //	    TEST_HIGH;
 //	}
-	while(1)
-	{
-	nrf_config_write();
-	nrf_config_read();
-    /* Never leave main */
-	}
+//	while(1)
+//	{
+//	nrf_config_write();
+//	nrf_config_read();
+//    /* Never leave main */
+//	}
     return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
